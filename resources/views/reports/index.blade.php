@@ -46,6 +46,12 @@
                 Deskripsi:
                 {{ $report->description }}
             </p>
+
+            <p>
+                <a href="{{ route('reports.show', $report->id) }}">
+                    Detail Laporan
+                </a>
+            </p>
         </article>
 
         <hr>

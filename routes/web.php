@@ -5,6 +5,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReportReviewController;
 use App\Http\Controllers\FollowUpController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ReportEvidenceController;
 use Illuminate\Support\Facades\Route;
 
 // Halaman utama
@@ -27,6 +28,16 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 // Dashboard berdasarkan role
 Route::middleware('auth')->group(function () {
+
+    // Akses bukti laporan
+    Route::get('/reports/{id}/evidence', [
+        ReportEvidenceController::class,
+        'show'
+    ])
+        ->whereNumber('id')
+        ->name('reports.evidence');
+
+    // Dashboard berdasarkan role
     Route::get('/dashboard', function () {
         $role = auth()->user()->role;
 
@@ -38,7 +49,9 @@ Route::middleware('auth')->group(function () {
         };
     })->name('dashboard');
 
+    // Role Pelapor
     Route::middleware('role:pelapor')->group(function () {
+
         Route::view('/dashboard/pelapor', 'dashboard.pelapor')
             ->name('dashboard.pelapor');
 
@@ -68,7 +81,9 @@ Route::middleware('auth')->group(function () {
             ->name('reports.update');
     });
 
+    // Role Pemantau
     Route::middleware('role:pemantau')->group(function () {
+
         Route::view('/dashboard/pemantau', 'dashboard.pemantau')
             ->name('dashboard.pemantau');
 
@@ -85,7 +100,9 @@ Route::middleware('auth')->group(function () {
             ->name('reviews.store');
     });
 
+    // Role Koordinator
     Route::middleware('role:koordinator')->group(function () {
+
         Route::get('/dashboard/koordinator', [DashboardController::class, 'coordinator'])
             ->name('dashboard.koordinator');
 

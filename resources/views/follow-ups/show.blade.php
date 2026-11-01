@@ -56,11 +56,18 @@
 
     <p>{{ $report->description }}</p>
 
-    <p>
-        Bukti:
-        {{ $report->evidence_path ? 'Tersedia' : 'Tidak tersedia' }}
-    </p>
-
+    @if ($report->evidence_path)
+        <p>
+            Bukti:
+            <a href="{{ route('reports.evidence', $report->id) }}"
+            target="_blank">
+                Lihat Bukti
+            </a>
+        </p>
+    @else
+        <p>Bukti tidak tersedia.</p>
+    @endif
+    
     <hr>
 
     <h2>Riwayat Pemeriksaan Pemantau</h2>

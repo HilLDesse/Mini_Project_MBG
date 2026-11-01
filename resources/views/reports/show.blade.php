@@ -48,7 +48,11 @@
 
     @if ($report->evidence_path)
         <p>
-            Bukti pendukung tersedia.
+            Bukti pendukung:
+            <a href="{{ route('reports.evidence', $report->id) }}"
+            target="_blank">
+                Lihat Bukti
+            </a>
         </p>
     @else
         <p>
