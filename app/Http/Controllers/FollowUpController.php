@@ -9,19 +9,29 @@ use Illuminate\Support\Facades\DB;
 
 class FollowUpController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
+        $validated = $request->validate([
+            'search' => ['nullable', 'string', 'max:255'],
+        ]);
+
         $reports = Report::with([
             'user',
             'distribution.school',
             'distribution.sppg',
         ])
             ->where('status', 'menunggu_tindak_lanjut')
+            ->when($validated['search'] ?? null, function ($query, $search) {
+                $query->where('title', 'like', "%{$search}%");
+            })
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         return view('follow-ups.index', compact('reports'));
     }
+
 
     public function show(int $id)
     {

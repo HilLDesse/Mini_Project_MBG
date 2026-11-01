@@ -10,18 +10,41 @@ use Illuminate\Validation\Rule;
 
 class ReportReviewController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
+        $validated = $request->validate([
+            'search' => ['nullable', 'string', 'max:255'],
+            'status' => [
+                'nullable',
+                Rule::in([
+                    'menunggu_peninjauan',
+                    'sedang_ditinjau',
+                    'perlu_informasi_tambahan',
+                    'menunggu_tindak_lanjut',
+                    'selesai_diproses',
+                ]),
+            ],
+        ]);
+
         $reports = Report::with([
             'user',
             'distribution.school',
             'distribution.sppg',
         ])
+            ->when($validated['search'] ?? null, function ($query, $search) {
+                $query->where('title', 'like', "%{$search}%");
+            })
+            ->when($validated['status'] ?? null, function ($query, $status) {
+                $query->where('status', $status);
+            })
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         return view('reviews.index', compact('reports'));
     }
+
 
     public function show(int $id)
     {

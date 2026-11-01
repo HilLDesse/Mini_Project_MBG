@@ -17,6 +17,31 @@
 
     <hr>
 
+    <h2>Pencarian Laporan</h2>
+
+    <form action="{{ route('follow-ups.index') }}" method="GET">
+        <label for="search">Cari Judul Laporan</label>
+        <br>
+
+        <input
+            type="text"
+            name="search"
+            id="search"
+            value="{{ request('search') }}"
+            placeholder="Masukkan judul laporan"
+        >
+
+        <button type="submit">Cari</button>
+
+        <a href="{{ route('follow-ups.index') }}">
+            Reset
+        </a>
+    </form>
+
+    <hr>
+
+    <h2>Hasil Laporan</h2>
+
     @forelse ($reports as $report)
         <article>
             <h3>{{ $report->title }}</h3>
@@ -53,7 +78,7 @@
         <hr>
     @empty
         <p>
-            Belum terdapat laporan yang menunggu tindak lanjut.
+            Tidak ditemukan laporan yang menunggu tindak lanjut.
         </p>
     @endforelse
 
