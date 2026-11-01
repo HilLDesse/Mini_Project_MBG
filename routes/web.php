@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReportReviewController;
 use Illuminate\Support\Facades\Route;
 
 // Halaman utama
@@ -68,6 +69,18 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:pemantau')->group(function () {
         Route::view('/dashboard/pemantau', 'dashboard.pemantau')
             ->name('dashboard.pemantau');
+
+        // Fitur pemeriksaan laporan
+        Route::get('/reviews', [ReportReviewController::class, 'index'])
+            ->name('reviews.index');
+
+        Route::get('/reviews/{id}', [ReportReviewController::class, 'show'])
+            ->whereNumber('id')
+            ->name('reviews.show');
+
+        Route::post('/reviews/{id}', [ReportReviewController::class, 'store'])
+            ->whereNumber('id')
+            ->name('reviews.store');
     });
 
     Route::middleware('role:koordinator')->group(function () {
