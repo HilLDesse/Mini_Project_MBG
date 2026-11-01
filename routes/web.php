@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReportReviewController;
+use App\Http\Controllers\FollowUpController;
 use Illuminate\Support\Facades\Route;
 
 // Halaman utama
@@ -86,5 +87,18 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:koordinator')->group(function () {
         Route::view('/dashboard/koordinator', 'dashboard.koordinator')
             ->name('dashboard.koordinator');
+
+        // Fitur pencatatan tindak lanjut
+        Route::get('/follow-ups', [FollowUpController::class, 'index'])
+            ->name('follow-ups.index');
+
+        Route::get('/follow-ups/{id}', [FollowUpController::class, 'show'])
+            ->whereNumber('id')
+            ->name('follow-ups.show');
+
+        Route::post('/follow-ups/{id}', [FollowUpController::class, 'store'])
+            ->whereNumber('id')
+            ->name('follow-ups.store');
     });
+
 });
