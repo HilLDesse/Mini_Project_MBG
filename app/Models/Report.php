@@ -44,4 +44,9 @@ class Report extends Model
     {
         return $this->hasMany(ReportFollowUp::class);
     }
+
+    public function statusLogs(): HasMany
+    {
+        return $this->hasMany(ReportStatusLog::class);
+    }
 }
