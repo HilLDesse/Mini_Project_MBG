@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 // Halaman utama
@@ -37,6 +38,31 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:pelapor')->group(function () {
         Route::view('/dashboard/pelapor', 'dashboard.pelapor')
             ->name('dashboard.pelapor');
+
+        // Fitur pelaporan
+        Route::get('/reports', [ReportController::class, 'index'])
+            ->name('reports.index');
+
+        Route::get('/reports/create', [ReportController::class, 'create'])
+            ->name('reports.create');
+
+        Route::get('/reports/distributions', [ReportController::class, 'distributionsBySchool'])
+            ->name('reports.distributions');
+
+        Route::post('/reports', [ReportController::class, 'store'])
+            ->name('reports.store');
+
+        Route::get('/reports/{id}', [ReportController::class, 'show'])
+            ->whereNumber('id')
+            ->name('reports.show');
+
+        Route::get('/reports/{id}/edit', [ReportController::class, 'edit'])
+            ->whereNumber('id')
+            ->name('reports.edit');
+
+        Route::put('/reports/{id}', [ReportController::class, 'update'])
+            ->whereNumber('id')
+            ->name('reports.update');
     });
 
     Route::middleware('role:pemantau')->group(function () {
