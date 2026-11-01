@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReportReviewController;
 use App\Http\Controllers\FollowUpController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Halaman utama
@@ -85,7 +86,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('role:koordinator')->group(function () {
-        Route::view('/dashboard/koordinator', 'dashboard.koordinator')
+        Route::get('/dashboard/koordinator', [DashboardController::class, 'coordinator'])
             ->name('dashboard.koordinator');
 
         // Fitur pencatatan tindak lanjut
